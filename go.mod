@@ -1,4 +1,4 @@
-module google.golang.org/grpc/cmd/protoc-gen-go-grpc
+module github.com/sinsay/protoc-gen-go-grpc-fx
 
 go 1.19
 
