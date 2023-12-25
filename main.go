@@ -53,6 +53,17 @@ func main() {
 		return
 	}
 
+	//// load test file
+	//tempFile, err := os.OpenFile("./test/test.data", os.O_RDONLY, 0766)
+	//if err != nil {
+	//	fmt.Println("load test file failed:", err)
+	//	return
+	//}
+	//defer func() { _ = tempFile.Close() }()
+	//
+	//// replace test file as stdin
+	//os.Stdin = tempFile
+
 	var flags flag.FlagSet
 	requireUnimplemented = flags.Bool("require_unimplemented_servers", true, "set to false to match legacy behavior")
 
