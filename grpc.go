@@ -20,7 +20,6 @@ package main
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
 	"strings"
 
@@ -183,11 +182,13 @@ func generateFileContent(gen *protogen.Plugin, file *protogen.File, g *protogen.
 	g.P("const _ = ", grpcPackage.Ident("SupportPackageIsVersion7")) // When changing, update version number above.
 	g.P("const _ = ", fxPackage.Ident("Version"))                    // When changing, update version number above.
 	g.P("var _ = new(", fmtPackage.Ident("Stringer"), ")")
-	g.P("var _ = new(", kratosPackage.Ident("Logger"), ")")
-	g.P("var _ = new(", clientPackage.Ident("ClientConn"), ")")
-	g.P("var _ = new(", configPackage.Ident("ConfigureWatcherRepo"), ")")
-	g.P("var _ = new(", defPackage.Ident("Log"), ")")
-	g.P("var _ = new(", injectionPackage.Ident("Option"), ")")
+
+	// Generate dependence for auto-inject, deprecate, now we use the pure injection with adding new dependency
+	//g.P("var _ = new(", kratosPackage.Ident("Logger"), ")")
+	//g.P("var _ = new(", clientPackage.Ident("ClientConn"), ")")
+	//g.P("var _ = new(", configPackage.Ident("ConfigureWatcherRepo"), ")")
+	//g.P("var _ = new(", defPackage.Ident("Log"), ")")
+	//g.P("var _ = new(", injectionPackage.Ident("Option"), ")")
 
 	g.P()
 	for _, service := range file.Services {
@@ -236,7 +237,8 @@ func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 		g.P(deprecationComment)
 	}
 
-	GenerateClientInjection(clientName, g, service, gen)
+	GenerateClientPureInjection(clientName, g, service, gen)
+	//GenerateClientInjection(clientName, g, service, gen)
 
 	//gen.Request.ProtoFile[0].
 	//g.P("return ", service.Options.extensionFields[99999].value.String()))
@@ -353,50 +355,6 @@ func clientSignature(g *protogen.GeneratedFile, method *protogen.Method) string 
 	}
 	s += ", error)"
 	return s
-}
-
-// getRegistryName find service register name by location and option
-func getRegistryName(gen *protogen.Plugin, service *protogen.Service) string {
-	var pb *descriptorpb.FileDescriptorProto = nil
-	for _, f := range gen.Request.ProtoFile {
-		// api/ping-service/v1/services/ping.service.v1.proto
-		if f.Name != nil && *f.Name == service.Location.SourceFile {
-			pb = f
-			break
-		}
-	}
-
-	if pb == nil {
-		return "CANT FIND SOURCE FILE FOR " + service.GoName
-	}
-
-	var srv *descriptorpb.ServiceDescriptorProto = nil
-	for _, f := range pb.Service {
-		if f.Name != nil && *f.Name == service.GoName {
-			srv = f
-			break
-		}
-	}
-
-	if srv == nil {
-		return "CANT FIND SERVICE FOR " + service.GoName
-	}
-
-	options := srv.GetOptions()
-	if options == nil {
-		return "HAVEN'T SET OPTION OF SERVICE NAME FOR " + service.GoName
-	}
-	// [api.ping.service.pingservicev1.name]:"permission-service"
-	// check and extract name from string
-	regText := fmt.Sprintf(`\[%s.name\]:\"(.+?)\"`, *pb.Package)
-	reg := regexp.MustCompile(regText)
-	extractFormula := reg.FindStringSubmatch(options.String())
-	if len(extractFormula) <= 1 {
-		return "DOESN'T MATCH OPTION STRING FOR " + service.GoName
-
-	}
-
-	return extractFormula[1]
 }
 
 func genClientMethod(gen *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFile, method *protogen.Method, index int) {
