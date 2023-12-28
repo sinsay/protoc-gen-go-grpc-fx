@@ -53,7 +53,7 @@ message PingResp {
 // SrvPingV1 demo
 service SrvPingV1 {
 
-	// define the service name
+  // define the service name
   option (name) = "/ping_service/v1";
 
   // Ping api
@@ -137,25 +137,22 @@ func run() {
     serverProvider,
     // the collector to trigger all server already reagister to fx
     fx.Annotate(
-			func (grpcRegister []fmt.Stringer) *injectDep {
-        fmt.Print(len(grpcRegister))
-				return &injectDep{}
-			},
-			fx.ParamTags(`name:"logger"`, `group:"http_register"`, `group:"grpc_register"`),
-		),
+	func (grpcRegister []fmt.Stringer) *injectDep {
+        	fmt.Print(len(grpcRegister))
+		return &injectDep{}
+	},
+	fx.ParamTags(`name:"logger"`, `group:"http_register"`, `group:"grpc_register"`),
+    ),
     // call while fx run
-    fx.Invoke(func (n *injectDep) {
-			fmt.Print("Injected service finished...")
-		}),
+    fx.Invoke(
+	func (n *injectDep) {
+	    fmt.Print("Injected service finished...")
+	},
+    ),
   )
 }
 
 ```
-
-
-
-
-
 
 
 
@@ -170,7 +167,7 @@ first is the client side, you got service name, and register provider for inject
 type SrvPingV1Client interface {
 	// Ping the demo api
 	Ping(ctx context.Context, in *resources.PingReq, opts ...grpc.CallOption) (*resources.PingResp, error)
-  // RegisterNameForDiscover is the service name for registry and service discover
+        // RegisterNameForDiscover is the service name for registry and service discover
 	RegisterNameForDiscover() string
 }
 
