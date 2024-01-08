@@ -41,7 +41,7 @@ import (
 	"google.golang.org/protobuf/types/pluginpb"
 )
 
-const version = "1.3.0"
+const version = "1.3.1"
 
 var requireUnimplemented *bool
 
@@ -53,6 +53,12 @@ func main() {
 		return
 	}
 
+	//in, _ := io.ReadAll(os.Stdin)
+
+	//f, _ := os.OpenFile("./test.data", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0766)
+	//_, _ = f.Write(in)
+	//_ = f.Close()
+	//return
 	//// load test file
 	//tempFile, err := os.OpenFile("./test/test.data", os.O_RDONLY, 0766)
 	//if err != nil {
@@ -60,7 +66,6 @@ func main() {
 	//	return
 	//}
 	//defer func() { _ = tempFile.Close() }()
-	//
 	//// replace test file as stdin
 	//os.Stdin = tempFile
 
