@@ -75,7 +75,7 @@ func getRegistryName(gen *protogen.Plugin, service *protogen.Service) string {
 			_, _ = fmt.Fprintf(os.Stderr, "[Service] [WARNING] Got multiple service name!\n")
 		}
 		for _, s := range serviceInfos {
-			_, _ = fmt.Fprintf(os.Stderr, "[Service] Got Service [%s] with name %s:%d\n", s.ServiceFullName, s.ServiceName, s.ServiceNumber)
+			_, _ = fmt.Fprintf(os.Stderr, "[Service] Got GRPC Service [%s] with name %s:%d\n", s.ServiceFullName, s.ServiceName, s.ServiceNumber)
 		}
 
 		return serviceInfos[0].ServiceName

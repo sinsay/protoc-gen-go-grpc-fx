@@ -54,11 +54,12 @@ func main() {
 	}
 
 	//in, _ := io.ReadAll(os.Stdin)
-
+	//
 	//f, _ := os.OpenFile("./test.data", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0766)
 	//_, _ = f.Write(in)
 	//_ = f.Close()
 	//return
+
 	//// load test file
 	//tempFile, err := os.OpenFile("./test/test.data", os.O_RDONLY, 0766)
 	//if err != nil {
