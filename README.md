@@ -1,5 +1,6 @@
 # protoc-gen-go-grpc-fx
 
+
 create from protoc-gen-go-grpc, add feature for kratos with fx injection framework,
 
 usage:
